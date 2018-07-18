@@ -1,4 +1,4 @@
-# de_utm
+# de_robonomics
 
 #### de_msgs
 Описание сообщений и названий топиков для формирования objective в формате rosbag. Objective - поле сообщения ask/bid в сети Robonomics.

@@ -1,0 +1,13 @@
+{
+	"telemetry": {
+		"timestamp": 1531906756123,
+		"latitude": 2.558756,
+		"longitude": 28.488671,
+		"altitude_agl": 100,
+		"pitch": 0,
+		"roll": 0, 
+		"yaw": 100,
+		"velocity_hor": 5,
+		"velocity_ver": 1
+	}
+}
