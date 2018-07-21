@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import serial
@@ -25,14 +25,13 @@ latitude = 0.0
 longitude = 0.0
 
 def ipfs_send (api, file):
-    # for i in range(3):
     try:
         res = api.add(file)
         return res
     except:
         return 'IPFS error'
 
-def write_send_data(frame_array, api_loc, api_rem):
+def write_send_data(frame_array, api_loc):
     fileName = 'data_'
     dir = os.path.dirname(__file__)
     folderName = os.path.join(dir, 'sensor_data/')

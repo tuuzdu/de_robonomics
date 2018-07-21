@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from robonomics_lighthouse.msg import Ask, Bid
@@ -6,12 +6,13 @@ from std_msgs.msg import String
 from std_srvs.srv import Empty
 import rospy
 from web3 import Web3, HTTPProvider
-import threading
+from threading import Thread
 
 
 class Agent:
 
 	current_measurement = None
+	# in_work = False
 
     def __init__(self):
         rospy.init_node('de_airsense_agent')
@@ -24,6 +25,7 @@ class Agent:
 
         def incoming_ask(ask_msg):
             if ask_msg.model == self.model and ask_msg.token == self.token:
+            	# self.in_work = True
                 rospy.loginfo('Incoming ask with right model and token.')
                 self.make_bid(ask_msg)
             else:
@@ -38,7 +40,7 @@ class Agent:
         rospy.wait_for_service('liability/finish')
         self.finish_srv = rospy.ServiceProxy('liability/finish', Empty)
 
-        threading.Thread(target=self.process, daemon=True).start()
+        Thread(target=self.process, daemon=True).start()
 
     def make_bid(self, incoming_ask):
         rospy.loginfo('Making bid...')
@@ -54,10 +56,11 @@ class Agent:
 
     def process(self):
         while True:
-            while not self.current_measurement:
+            while not self.current_measurement: # and not self.in_work
                 rospy.sleep(1)
             self.current_measurement = None
             self.finish_srv()
+            # self.in_work = False
             rospy.loginfo('Liability finished')
     
     def spin(self):
