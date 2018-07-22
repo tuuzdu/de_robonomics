@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import serial
@@ -60,9 +60,7 @@ class WaspmoteIPFS:
                                             stopbits=serial.STOPBITS_ONE, 
                                             bytesize=serial.EIGHTBITS)
 
-        thread = Thread(target=self.serial_receiver)
-        thread.daemon = True
-        thread.start()
+        thread = Thread(target=self.serial_receiver, daemon=True).start()
 
     def serial_receiver(self):
         STOP_SYMBOL = b'$'
@@ -130,20 +128,22 @@ class WaspmoteIPFS:
 
         def ipfs_send (api, file):
             try:
-                res = api.add(file)
-                return res
+                result = api.add(file)
+                return result
             except:
-                return 'IPFS error'
+                return False
 
-        res = ipfs_send(self.ipfs_api_loc, path)
+        result = ipfs_send(self.ipfs_api_loc, path)
         rospy.logdebug('IPFS local node response:')
-        rospy.logdebug(res)
-        if res['Hash']:
+        rospy.logdebug(result)
+        if result['Hash']:
             rospy.loginfo('IPFS file hash:')
-            rospy.loginfo(res['Hash'])
+            rospy.loginfo(result['Hash'])
             result_msg = String()
-            result_msg.data = res['Hash']
+            result_msg.data = result['Hash']
             self.result_pub.publish(result_msg)
+        else:
+            rospy.loginfo('IPFS error')
 
     def spin(self):
         rospy.spin()

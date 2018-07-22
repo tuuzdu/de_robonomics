@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from robonomics_lighthouse.msg import Ask, Bid
@@ -54,7 +54,7 @@ class Agent:
         bid.deadline = self.web3.eth.getBlock('latest').number + self.bid_lifetime
         self.signing_bid_pub(bid)
 
-    def process(self):
+    def process(self): # to subscriber cb?
         while True:
             while not self.current_measurement: # and not self.in_work
                 rospy.sleep(1)
