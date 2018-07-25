@@ -26,7 +26,8 @@ class FlightMission:
                 if not resp.result:
                     return
             except rospy.ServiceException as e:
-                rospy.loginfo(e)
+                rospy.logwarn(e)
+                return
 
             try:
                 mission = rospy.ServiceProxy('dji_sdk/mission_waypoint_upload', MissionWpUpload)
@@ -40,22 +41,23 @@ class FlightMission:
                 mission_task_msg.action_on_rc_lost  = MissionWaypointTask.ACTION_AUTO;
                 mission_task_msg.gimbal_pitch_mode  = MissionWaypointTask.GIMBAL_PITCH_FREE;
 
-                rospy.loginfo('Received mission from objective: ')
+                rospy.loginfo('Received mission from objective:')
                 rospy.loginfo(mission_msg)
-                for index in range(len(mission_msg.waypoints)):
-                    cmd_parameter = [mission_msg.waypoints[index].staytime * 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                    mission_task_msg.mission_waypoint.append(MissionWaypoint( latitude = mission_msg.waypoints[index].latitude, 
-                                                            longitude = mission_msg.waypoints[index].longitude, 
-                                                            altitude = mission_msg.waypoints[index].altitude, 
-                                                            damping_distance = 2, 
-                                                            target_yaw = 0, 
-                                                            has_action = 1, 
-                                                            target_gimbal_pitch = 0, 
-                                                            turn_mode = 0, 
-                                                            action_time_limit = 64000,
-                                                            waypoint_action = MissionWaypointAction(
-                                                            action_repeat = 10,
-                                                            command_parameter = cmd_parameter )))
+                for item in mission_msg.waypoints:
+                    cmd_parameter = [item.staytime * 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    mission_task_msg.mission_waypoint.append(MissionWaypoint( 
+                                                                latitude = item.latitude,
+                                                                longitude = item.longitude,
+                                                                altitude = item.altitude,
+                                                                damping_distance = 2,
+                                                                target_yaw = 0,
+                                                                has_action = 1,
+                                                                target_gimbal_pitch = 0,
+                                                                turn_mode = 0,
+                                                                action_time_limit = 64000,
+                                                                waypoint_action = MissionWaypointAction(
+                                                                                    action_repeat = 10,
+                                                                                    command_parameter = cmd_parameter )))
 
                 rospy.logdebug(mission_task_msg)
                 rospy.loginfo('Service. Mission waypoint upload:')
@@ -64,7 +66,8 @@ class FlightMission:
                 if not resp.result:
                     return
             except rospy.ServiceException as e:
-                rospy.loginfo(e)
+                rospy.logwarn(e)
+                return
 
             try:
                 start = rospy.ServiceProxy('dji_sdk/mission_waypoint_action', MissionWpAction)
@@ -74,7 +77,8 @@ class FlightMission:
                 if not resp.result:
                     return
             except rospy.ServiceException as e:
-                rospy.loginfo(e)
+                rospy.logwarn(e)
+                return
 
         rospy.Subscriber('objective/mission', Mission, mission_start)
         rospy.loginfo('Waiting for objective at "objective/mission" topic ...')
