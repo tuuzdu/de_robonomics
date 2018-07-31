@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import serial
@@ -147,6 +146,3 @@ class WaspmoteIPFS:
 
     def spin(self):
         rospy.spin()
-
-if __name__ == '__main__':
-    WaspmoteIPFS().spin()

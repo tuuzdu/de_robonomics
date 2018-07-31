@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import rospy
@@ -85,6 +84,3 @@ class FlightMission:
 
     def spin(self):
         rospy.spin()
-
-if __name__ == '__main__':
-    FlightMission().spin()

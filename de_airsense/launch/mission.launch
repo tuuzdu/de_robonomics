@@ -15,11 +15,11 @@
 	    <param name="use_broadcast" type="bool" value="false"/>
     </node>
 
-	<node name="de_airsense_mission" pkg="de_airsense" type="de_airsense_mission.py" output="screen"> </node>
+	<node name="de_airsense_mission" pkg="de_airsense" type="mission_node" output="screen"> </node>
 
-	<node name="de_airsense_waspmote_ipfs" pkg="de_airsense" type="de_airsense_waspmote_ipfs.py" output="screen"> </node>
+	<node name="de_airsense_waspmote_ipfs" pkg="de_airsense" type="waspmote_ipfs_node" output="screen"> </node>
 
-	<node name="de_airsense_agent" pkg="de_airsense" type="de_airsense_agent.py" output="screen"> 
+	<node name="de_airsense_agent" pkg="de_airsense" type="agent_node" output="screen"> 
 		<param name="ipfs_http_provider" value="$(arg ipfs_http_provider)" />
 	    <param name="web3_http_provider" value="$(arg web3_http_provider)" />
 	    <param name="model" value="QmdFh1HPVe7H4LrDio899mxA7NindgxqiNUM9BNnBD7ryS" />

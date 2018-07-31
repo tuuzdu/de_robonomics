@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from robonomics_lighthouse.msg import Ask, Bid
@@ -66,6 +65,3 @@ class Agent:
     
     def spin(self):
         rospy.spin()
-
-if __name__ == '__main__':
-    Agent().spin()
