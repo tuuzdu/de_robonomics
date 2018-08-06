@@ -1,8 +1,8 @@
 <launch>
   <arg name="ipfs_http_provider" default="http://127.0.0.1:5001" />
-  <arg name="server_address" default="https://192.168.11.254:3026" />
-  <arg name="certfile" default="/etc/ssl/devjs-01.corp.aira.life/devjs-01.corp.aira.life.cer" />
-  <arg name="keyfile" default="/etc/etc/devjs-01.corp.aira.life/devjs-01.corp.aira.life.key" />
+  <arg name="server_address" default="https://0.0.0.0:4321" />
+  <arg name="certfile" default="" /> <!-- your "domain.cer" file path -->
+  <arg name="keyfile" default="" /> <!-- your "domain.key" file path -->
 
   <node name="objective_composer" pkg="de_objective_composer" type="objective_composer_node" output="screen">
     <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)" />
