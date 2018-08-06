@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 
@@ -15,7 +15,7 @@ from de_msgs.msg import Mission, Waypoint
 import ipfsapi
 from flask import Flask, request
 from flask_restful import Resource, Api
-from flask.json import jsonify
+from flask.json import jsonify, loads
 from flask_cors import CORS
 from urllib.parse import urlparse
 import tempfile
@@ -41,21 +41,26 @@ class ComposeObjective(Resource): # ui input to agent liability objective
         """request example:
            $ curl -H "Content-type: application/json" \
                   -X POST https://0.0.0.0:8888/ \
-                  -d '{"lat":"49.368550","lng":"75.403660","alt":"100","time":"5"}'
+                  -d '{ "p0": {"lat": "53", "lng": "32.2332", alt: "60", "time": "5"},
+                        "p1": {"lat": "53.45456", lng: "32.2332", "alt": "60", "time": "5"}}'
         """
         rospy.loginfo('Composer request for: ' + str(request.get_json()))
         bag_name = tmp_dir + '/objective-' + next(tempfile._get_candidate_names()) + '.bag'
 
         with rosbag.Bag(bag_name, 'w') as bag:
             mission = Mission()
-            waypoint = Waypoint()
-            waypoint.latitude   = float(request.get_json()['lat'])
-            waypoint.longitude = float(request.get_json()['lng'])
-            waypoint.altitude = float(request.get_json().get('alt', 100))
-            waypoint.staytime = int(request.get_json().get('time', 5))
-            mission.waypoints   = [waypoint, waypoint]
+            mission.waypoints = list()
+            req = request.get_json()
+            for point in sorted(req): # from p0 to pMAX
+                waypoint = Waypoint()
+                waypoint.latitude  = float(req[point]['lat'])
+                waypoint.longitude = float(req[point]['lng'])
+                waypoint.altitude  = float(req[point].get('alt', 100)) # 100 meters default
+                waypoint.staytime  = int(req[point].get('time', 5)) # 5 seconds default
+                mission.waypoints.append(waypoint)
             bag.write('/objective/mission', mission)
-
+            rospy.loginfo('Content:')
+            rospy.loginfo(mission)
         rospy.loginfo('Bag: ' + bag_name)
         ipfs_response = ipfs.add(bag_name)
         try:
