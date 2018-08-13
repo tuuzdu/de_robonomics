@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from robonomics_lighthouse.msg import Ask, Bid
+from de_msgs.msg import Mission
 from std_msgs.msg import String
 from std_srvs.srv import Empty
 from web3 import Web3, HTTPProvider
 from threading import Thread
 from urllib.parse import urlparse
-import rospy, ipfsapi
+from tempfile import TemporaryDirectory
+from rosbag import Bag
+import rospy, ipfsapi, os
 
 
 class Agent:
@@ -25,21 +28,26 @@ class Agent:
         self.signing_bid_pub = rospy.Publisher('liability/infochan/signing/bid', Bid, queue_size=10)
 
         def incoming_ask(ask_msg):
-            rospy.loginfo('Incoming ask: ' + str(ask_msg))
+            rospy.loginfo('Incoming ask:\n' + str(ask_msg))
             if ask_msg.model == self.model and ask_msg.token == self.token:
                 rospy.loginfo('Incoming ask with right model and token')
 
-                def objective_check():
+                with TemporaryDirectory() as tmpdir:
+                    rospy.logdebug('Temporary directory created: %s', tmpdir)
+                    os.chdir(tmpdir)
                     rospy.loginfo('Waiting for objective file from IPFS...')
-                    self.ipfs.ls(ask_msg.objective)
-                    # msg_type = list(bag.get_type_and_topic_info()[0].values())[0]
-                check_thread = Thread(target=objective_check)
-                check_thread.start()
-                check_thread.join(60)
-                if check_thread.is_alive():
-                    rospy.logwarn('Timeout of waiting objective file: ' + str(ask_msg.objective))
-                    rospy.logwarn('Skip incoming ask')
-                    return
+                    try:
+                        self.ipfs.get(ask_msg.objective, timeout=60)
+                        rospy.logdebug('Objective is written to %s', tmpdir + '/' + ask_msg.objective)
+                        bag = Bag(str(tmpdir + '/' + ask_msg.objective))
+                        msg_type = list(bag.get_type_and_topic_info()[1].values())[0][0]
+                        if msg_type != Mission()._type:
+                            rospy.logwarn('Wrong message type in objective topic')
+                            return
+                    except ipfsapi.exceptions.TimeoutError:
+                        rospy.logwarn('Timeout of waiting objective file: ' + str(ask_msg.objective))
+                        rospy.logwarn('Skip incoming ask')
+                        return
 
                 self.make_bid(ask_msg)
             else:
