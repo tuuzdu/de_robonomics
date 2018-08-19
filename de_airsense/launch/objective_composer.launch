@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <launch>
   <arg name="ipfs_http_provider" default="http://127.0.0.1:5001" />
   <arg name="server_address" default="https://0.0.0.0:4321" />

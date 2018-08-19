@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from . import agent 
-from . import mission
+from . import mission_dji
+from . import mission_px4
 from . import waspmote_ipfs
 
 def agent_node():
     agent.Agent().spin()
 
-def mission_node():
-    mission.FlightMission().spin()
+def mission_dji_node():
+    mission_dji.FlightMission().spin()
+
+def mission_px4_node():
+    mission_px4.FlightMission().spin()
 
 def waspmote_ipfs_node():
     waspmote_ipfs.WaspmoteIPFS().spin()

@@ -3,6 +3,7 @@ project(de_airsense)
 
 find_package(catkin REQUIRED COMPONENTS
   dji_sdk
+  mavros
   rospy
   std_msgs
   sensor_msgs
@@ -15,7 +16,8 @@ catkin_package()
 catkin_install_python(
     PROGRAMS
         scripts/agent_node
-        scripts/mission_node
+        scripts/mission_dji_node
+        scripts/mission_px4_node
         scripts/waspmote_ipfs_node
     DESTINATION
         ${CATKIN_PACKAGE_BIN_DESTINATION}
