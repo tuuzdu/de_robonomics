@@ -26,6 +26,8 @@ catkin_install_python(
 install(
     FILES
         launch/mission.launch
+        launch/dji.launch
+        launch/px4.launch
     DESTINATION
         ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
