@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from de_airsense.nodes.agent import Agent
+from de_airsense.nodes import agent_node
 
 if __name__ == '__main__':
-    Agent().spin()
+    agent_node()

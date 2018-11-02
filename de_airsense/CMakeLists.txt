@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(de_airsense)
 
-find_package(catkin REQUIRED COMPONENTS
-  dji_sdk
-  mavros
-  rospy
-  std_msgs
-  sensor_msgs
+find_package(catkin REQUIRED 
+    COMPONENTS
+        dji_sdk
+        mavros
+        rospy
+        std_msgs
+        sensor_msgs
 )
 
 catkin_python_setup()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from robonomics_lighthouse.msg import Ask, Bid
+from robonomics_msgs.msg import Demand, Offer 
 from de_msgs.msg import Mission
 from std_msgs.msg import String
 from std_srvs.srv import Empty
@@ -25,7 +25,7 @@ class Agent:
         self.web3 = Web3(HTTPProvider(rospy.get_param('~web3_http_provider')))
         ipfs_provider = urlparse(rospy.get_param('~ipfs_http_provider')).netloc.split(':')
         self.ipfs = ipfsapi.connect(ipfs_provider[0], int(ipfs_provider[1]))
-        self.signing_bid_pub = rospy.Publisher('liability/infochan/signing/bid', Bid, queue_size=10)
+        self.signing_bid_pub = rospy.Publisher('liability/infochan/signing/offer', Offer, queue_size=10)
 
         def incoming_ask(ask_msg):
             rospy.loginfo('Incoming ask:\n' + str(ask_msg))
@@ -52,7 +52,7 @@ class Agent:
                 self.make_bid(ask_msg)
             else:
                 rospy.logwarn('Incoming ask with wrong model and token, skip')
-        rospy.Subscriber('liability/infochan/incoming/ask', Ask, incoming_ask)
+        rospy.Subscriber('liability/infochan/incoming/demand', Demand, incoming_ask)
 
         def measurements(hash_msg):
             self.current_measurement = hash_msg.data
@@ -66,7 +66,7 @@ class Agent:
 
     def make_bid(self, incoming_ask):
         rospy.loginfo('Making bid...')
-        bid = Bid()
+        bid = Offer()
         bid.model = self.model
         bid.objective = incoming_ask.objective
         bid.token = self.token

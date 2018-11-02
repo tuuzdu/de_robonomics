@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>de_robonomics</name>
+  <version>0.0.0</version>
+  <description>Drone Employee stack</description>
+  <maintainer email="tvvzdv@gmail.com">Ivan Biriuk</maintainer>
+  <license>BSD3</license>
+  <url type="repository">https://github.com/tuuzdu/de_robonomics</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+
+</package>

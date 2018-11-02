@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<launch> 
+<launch>
 
-	<arg name="enable_dji" default="true" />
-	<arg name="enable_px4" default="false" />
-	<arg name="enable_agent" default="true" /> 
+    <arg name="enable_dji" default="true" />
+    <arg name="enable_px4" default="false" />
+    <arg name="enable_agent" default="true" />
 
-	<include file="$(find de_airsense)/launch/dji.launch" if="$(arg enable_dji)"/>
+    <arg name="web3_http_provider" default="http://127.0.0.1:8545" />
+    <arg name="ipfs_http_provider" default="http://127.0.0.1:5001" />
+    <arg name="model" default="QmdFh1HPVe7H4LrDio899mxA7NindgxqiNUM9BNnBD7ryS" />
+    <arg name="token" default="0x3cBAF1d511Adf5098511B5c5B39e1F1b506C1AFE" />
 
-	<include file="$(find de_airsense)/launch/px4.launch" if="$(arg enable_px4)"/>
+    <arg name="dji_serial_port" default="/dev/ttyAMA0" />
 
-	<node name="de_airsense_agent" pkg="de_airsense" type="agent_node" output="screen" if="$(arg enable_agent)"> 
-		<param name="ipfs_http_provider" value="http://93.187.187.109:8545" />
-	    <param name="web3_http_provider" value="http://127.0.0.1:5001" />
-	    <param name="model" value="QmdFh1HPVe7H4LrDio899mxA7NindgxqiNUM9BNnBD7ryS" />
-	    <param name="token" value="0x3cBAF1d511Adf5098511B5c5B39e1F1b506C1AFE" />
-	    <param name="bid_lifetime" value="1000" /> <!-- Ethereum blocks lifetime, ~12-15 sec for one -->
-	</node>
+    <include file="$(find de_airsense)/launch/dji.launch" if="$(arg enable_dji)">
+        <arg name="dji_serial_port" value="$(arg dji_serial_port)" />
+    </include>
+
+    <include file="$(find de_airsense)/launch/px4.launch" if="$(arg enable_px4)"/>
+
+    <node name="de_airsense_agent" pkg="de_airsense" type="agent_node" output="screen" if="$(arg enable_agent)">
+        <param name="ipfs_http_provider" value="$(arg ipfs_http_provider)" />
+        <param name="web3_http_provider" value="$(arg web3_http_provider)" />
+        <param name="model" value="$(arg model)" />
+        <param name="token" value="$(arg token)" />
+        <param name="bid_lifetime" value="1000" /> <!-- Ethereum blocks lifetime, ~12-15 sec for one -->
+    </node>
 
 </launch>
