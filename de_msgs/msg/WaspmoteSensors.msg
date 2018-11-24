@@ -1,0 +1,1 @@
+de_msgs/Sensor[] waspmote_sensors

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch> 
+
+    <arg name="waspmote_serial_port" default="/dev/ttyUSB0" />
+    <arg name="waspmote_baud_rate" value="115200"/>
+
+    <node pkg="de_airsense" type="waspmote_serial_node" name="de_airsense_waspmote" output="screen">
+        <param name="serial_name" type="string" value="$(arg waspmote_serial_port)"/>
+        <param name="baud_rate" type="int" value="$(arg waspmote_baud_rate)"/>
+    </node>
+
+</launch>

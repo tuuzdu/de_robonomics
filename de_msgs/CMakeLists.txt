@@ -10,6 +10,8 @@ add_message_files(
     FILES
         Mission.msg
         Waypoint.msg
+        WaspmoteSensors.msg
+        Sensor.msg
 )
 
 generate_messages()

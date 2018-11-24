@@ -6,6 +6,7 @@ find_package(catkin REQUIRED
         dji_sdk
         mavros
         rospy
+        de_msgs
         std_msgs
         sensor_msgs
 )
@@ -19,7 +20,7 @@ catkin_install_python(
         scripts/agent_node
         scripts/mission_dji_node
         scripts/mission_px4_node
-        scripts/waspmote_ipfs_node
+        scripts/waspmote_serial_node
     DESTINATION
         ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
@@ -29,6 +30,7 @@ install(
         launch/mission.launch
         launch/dji.launch
         launch/px4.launch
+        launch/waspmote.launch
     DESTINATION
         ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
